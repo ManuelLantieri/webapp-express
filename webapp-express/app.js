@@ -206,8 +206,8 @@ const reviews = [
 
 app.use(express.json());
 
-app.get("/movies", (req, res) => {
-  res.json(results);
+app.get("/", (req, res) => {
+  res.json(movies);
 });
 
 // Rotta per ottenere un film specifico per ID
@@ -219,6 +219,18 @@ app.get("/movies/:id", (req, res) => {
   } else {
     res.status(404).send("Film non trovato");
   }
+
+  // Trova tutte le recensioni associate al film
+  const movieReviews = reviews.filter((r) => r.movie_id === movieId);
+
+  // Costruisci la risposta con i dettagli del film e le recensioni
+  const response = {
+    movie: movie,
+    reviews: movieReviews,
+    review_count: movieReviews.length,
+  };
+
+  res.json(response);
 });
 
 // Rotta per ottenere tutte le recensioni di un film specifico
